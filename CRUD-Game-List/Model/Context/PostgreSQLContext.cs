@@ -16,7 +16,7 @@ namespace CRUD_Game_List.Model.Context
 			// Relacionamento 1:N (Category -> Games)
 			modelBuilder.Entity<Game>()
 					.HasOne(g => g.Category)
-					.WithMany(c => c.Games)
+					.WithMany()
 					.HasForeignKey(g => g.CategoryID);
 
 			// (Opcional) índice único para nome de categoria

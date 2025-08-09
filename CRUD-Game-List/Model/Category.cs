@@ -5,6 +5,5 @@
 		public long Id { get; set; }
 		public string Name { get; set; } = default!;
 
-		public ICollection<Game> Games { get; set; } = new List<Game>();
 	}
 }
