@@ -1,16 +1,11 @@
 #!/usr/bin/env bash
 set -e
+HOST="$1"; PORT="$2"; shift 2
+CMD="$@"
 
-host="$1"
-shift
-port="$1"
-shift
-
-echo "Esperando $host:$port ficar pronto..."
-
-while ! nc -z "$host" "$port"; do
+echo "Aguardando $HOST:$PORT..."
+while ! (echo >/dev/tcp/$HOST/$PORT) >/dev/null 2>&1; do
   sleep 1
 done
-
-echo "$host:$port está pronto!"
-exec "$@"
+echo "$HOST:$PORT está disponível"
+exec $CMD
