@@ -6,5 +6,6 @@ namespace CRUD_Game_List.Business
 	{
 		Category AddCategory(string name);
 		List<Category> GetCategories();
+		Category FindCategoryById(long id);
 	}
 }

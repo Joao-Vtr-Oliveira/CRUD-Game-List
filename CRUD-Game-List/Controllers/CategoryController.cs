@@ -1,4 +1,5 @@
 ﻿using CRUD_Game_List.Business;
+using CRUD_Game_List.DTOs;
 using CRUD_Game_List.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,12 +23,22 @@ namespace CRUD_Game_List.Controllers
 			return Ok(_categoryBusiness.GetCategories());
 		}
 
-		[HttpPost]
-		public IActionResult Post([FromBody] Category category)
+		[HttpGet("{id}")]
+		public IActionResult Get(long id)
 		{
-			if (category == null) return BadRequest("Must provide a category.");
-			var cat = _categoryBusiness.AddCategory(category.Name);
+			var category = _categoryBusiness.FindCategoryById(id);
+			if (category == null) return NotFound();
+
+			return Ok(category);
+		}
+
+		[HttpPost]
+		public IActionResult Post([FromBody] CategoryCreateDto categoryDto)
+		{
+			if (string.IsNullOrEmpty(categoryDto.Name)) return BadRequest("Must provide a category name.");
+			var cat = _categoryBusiness.AddCategory(categoryDto.Name);
 			return Ok(cat);
 		}
+
 	}
 }

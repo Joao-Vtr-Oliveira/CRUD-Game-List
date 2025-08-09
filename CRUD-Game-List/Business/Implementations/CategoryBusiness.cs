@@ -16,6 +16,6 @@ namespace CRUD_Game_List.Business.Implementations
 		public List<Category> GetCategories() => _repository.GetCategories();
 		public Category AddCategory(string name) => _repository.AddCategory(name);
 
-		
+		public Category FindCategoryById(long id) => _repository.FindCategoryById(id);
 	}
 }

@@ -23,6 +23,13 @@ namespace CRUD_Game_List.Repositories
 
 		}
 
+		public Category FindCategoryById(long id)
+		{
+			var cat = _context.Categories.First(c => c.Id == id);
+			if (cat != null) return cat;
+			return null;
+		}
+
 		public List<Category> GetCategories()
 		{
 			return _context.Categories.ToList();
