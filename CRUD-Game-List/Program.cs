@@ -1,22 +1,42 @@
+// Program.cs
+using CRUD_Game_List.Model.Context;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// Controllers
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+var connectionString = builder.Configuration.GetConnectionString("PostgreConnection");
+
+builder.Services.AddDbContext<PostgreSQLContext>(options =>
+		options.UseNpgsql(connectionString)
+);
+
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// CORS (registre ANTES de build)
+builder.Services.AddCors(options =>
+{
+	options.AddDefaultPolicy(policy =>
+			policy.AllowAnyOrigin()
+						.AllowAnyMethod()
+						.AllowAnyHeader());
+});
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+	app.UseSwagger();
+	app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 
