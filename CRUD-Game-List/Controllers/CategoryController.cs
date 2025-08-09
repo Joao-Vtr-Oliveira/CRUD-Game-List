@@ -1,10 +1,6 @@
 ﻿using CRUD_Game_List.Business;
 using CRUD_Game_List.DTOs;
-using CRUD_Game_List.Model;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using System.Xml.Linq;
 
 namespace CRUD_Game_List.Controllers
 {
@@ -27,8 +23,8 @@ namespace CRUD_Game_List.Controllers
 			return Ok(dtos);
 		}
 
-		[HttpGet("{id}")]
-		public IActionResult Get(long id)
+		[HttpGet("{id:long}")]
+		public IActionResult GetById(long id)
 		{
 			var category = _categoryBusiness.FindCategoryById(id);
 			if (category == null) return NotFound();
@@ -42,7 +38,7 @@ namespace CRUD_Game_List.Controllers
 			if (string.IsNullOrEmpty(categoryDto.Name)) return BadRequest("Must provide a category name.");
 			var created = _categoryBusiness.AddCategory(categoryDto.Name);
 			var dto = new CategoryDto(created.Id, created.Name);
-			return CreatedAtAction(nameof(Get), new { id = created.Id }, dto);
+			return CreatedAtAction(nameof(GetById), new { id = created.Id }, dto);
 		}
 
 	}

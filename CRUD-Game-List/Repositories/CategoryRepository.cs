@@ -1,5 +1,6 @@
 ﻿using CRUD_Game_List.Model;
 using CRUD_Game_List.Model.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace CRUD_Game_List.Repositories
 {
@@ -14,25 +15,28 @@ namespace CRUD_Game_List.Repositories
 
 		public Category AddCategory(string name)
 		{
-			if (name == null) return null;
-			var category = new Category { Name = name };
+			var category = new Category { Name = name.Trim() };
 			_context.Add(category);
 			_context.SaveChanges();
-
 			return category;
 
 		}
 
-		public Category FindCategoryById(long id)
+		public bool ExistsByName(string name)
 		{
-			var cat = _context.Categories.First(c => c.Id == id);
-			if (cat != null) return cat;
-			return null;
+			var trimmed = name.Trim();
+			return _context.Categories.AsNoTracking().Any(c => c.Name.ToLower() == trimmed.ToLower());
+		}
+
+		public Category? FindCategoryById(long id)
+		{
+			var cat = _context.Categories.AsNoTracking().FirstOrDefault(c => c.Id == id);
+			return cat;
 		}
 
 		public List<Category> GetCategories()
 		{
-			return _context.Categories.ToList();
+			return _context.Categories.AsNoTracking().ToList();
 		}
 	}
 }

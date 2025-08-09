@@ -16,6 +16,11 @@ builder.Services.AddDbContext<PostgreSQLContext>(options =>
 		options.UseNpgsql(connectionString)
 );
 
+builder.Services.AddControllers(options =>
+{
+	options.Filters.Add<ApiExceptionFilter>();
+});
+
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

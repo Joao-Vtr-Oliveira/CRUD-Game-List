@@ -1,4 +1,5 @@
-﻿using CRUD_Game_List.Model;
+﻿using CRUD_Game_List.Domain.Exceptions;
+using CRUD_Game_List.Model;
 using CRUD_Game_List.Repositories;
 
 namespace CRUD_Game_List.Business.Implementations
@@ -14,7 +15,14 @@ namespace CRUD_Game_List.Business.Implementations
 		}
 
 		public List<Category> GetCategories() => _repository.GetCategories();
-		public Category AddCategory(string name) => _repository.AddCategory(name);
+		public Category AddCategory(string name)
+		{
+			var trimmed = name?.Trim() ?? "";
+			if (string.IsNullOrWhiteSpace(trimmed)) throw new ArgumentException("Name is required.", nameof(name));
+			if (_repository.ExistsByName(trimmed)) throw new DuplicateCategoryNameException(trimmed);
+			
+			return _repository.AddCategory(trimmed);
+		}
 
 		public Category FindCategoryById(long id) => _repository.FindCategoryById(id);
 	}
