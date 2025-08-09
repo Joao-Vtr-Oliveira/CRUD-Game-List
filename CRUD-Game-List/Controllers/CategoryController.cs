@@ -27,15 +27,12 @@ namespace CRUD_Game_List.Controllers
 		public IActionResult GetById(long id)
 		{
 			var category = _categoryBusiness.FindCategoryById(id);
-			if (category == null) return NotFound();
-
 			return Ok(new CategoryDto(category.Id, category.Name));
 		}
 
 		[HttpPost]
 		public IActionResult Post([FromBody] CategoryCreateDto categoryDto)
 		{
-			if (string.IsNullOrEmpty(categoryDto.Name)) return BadRequest("Must provide a category name.");
 			var created = _categoryBusiness.AddCategory(categoryDto.Name);
 			var dto = new CategoryDto(created.Id, created.Name);
 			return CreatedAtAction(nameof(GetById), new { id = created.Id }, dto);

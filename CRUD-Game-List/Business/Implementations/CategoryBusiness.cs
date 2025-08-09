@@ -24,6 +24,10 @@ namespace CRUD_Game_List.Business.Implementations
 			return _repository.AddCategory(trimmed);
 		}
 
-		public Category FindCategoryById(long id) => _repository.FindCategoryById(id);
+		public Category FindCategoryById(long id)
+		{
+			var cat = _repository.FindCategoryById(id);
+			return cat == null ? throw new CategoryNotFoundException(id) : cat;
+		}
 	}
 }
