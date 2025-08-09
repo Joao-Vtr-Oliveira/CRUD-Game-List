@@ -1,4 +1,3 @@
-// Program.cs
 using CRUD_Game_List.Business;
 using CRUD_Game_List.Business.Implementations;
 using CRUD_Game_List.Model.Context;
@@ -21,7 +20,7 @@ builder.Services.AddDbContext<PostgreSQLContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// CORS (registre ANTES de build)
+// CORS
 builder.Services.AddCors(options =>
 {
 	options.AddDefaultPolicy(policy =>
@@ -30,33 +29,35 @@ builder.Services.AddCors(options =>
 						.AllowAnyHeader());
 });
 
-
-// Dependency Injection:
+// Dependency Injection
 builder.Services.AddScoped<ICategoryBusiness, CategoryBusiness>();
-
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
-
 var app = builder.Build();
-if (app.Environment.IsDevelopment())
-{
-	app.UseSwagger();
-	app.UseSwaggerUI();
-}
 
+// Força URL para funcionar dentro do container
+app.Urls.Add("http://0.0.0.0:8080");
+
+// Swagger (antes dos middlewares de roteamento)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+	c.SwaggerEndpoint("/swagger/v1/swagger.json", "CRUD Game List API v1");
+	c.RoutePrefix = "swagger"; // deixa acessível em /swagger
+});
+
+// Remove redirecionamento HTTPS no container para evitar problema
+// app.UseHttpsRedirection(); // <- comentado para ambiente Docker
+
+app.UseCors();
+app.UseAuthorization();
+app.MapControllers();
+
+// Garante que migrações rodem no startup
 using (var scope = app.Services.CreateScope())
 {
 	var db = scope.ServiceProvider.GetRequiredService<PostgreSQLContext>();
 	db.Database.Migrate();
 }
-
-
-app.UseHttpsRedirection();
-
-app.UseCors();
-
-app.UseAuthorization();
-
-app.MapControllers();
 
 app.Run();
