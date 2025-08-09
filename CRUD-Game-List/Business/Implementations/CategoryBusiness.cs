@@ -1,17 +1,21 @@
 ﻿using CRUD_Game_List.Model;
+using CRUD_Game_List.Repositories;
 
 namespace CRUD_Game_List.Business.Implementations
 {
 	public class CategoryBusiness : ICategoryBusiness
 	{
-		public Category AddCategory(string name)
+
+		private readonly ICategoryRepository _repository;
+
+		public CategoryBusiness(ICategoryRepository repository)
 		{
-			throw new NotImplementedException();
+			_repository = repository;
 		}
 
-		public List<Category> GetCategories()
-		{
-			throw new NotImplementedException();
-		}
+		public List<Category> GetCategories() => _repository.GetCategories();
+		public Category AddCategory(string name) => _repository.AddCategory(name);
+
+		
 	}
 }

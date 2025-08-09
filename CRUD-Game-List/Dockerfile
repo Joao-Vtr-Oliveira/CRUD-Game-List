@@ -1,14 +1,10 @@
-# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-# This stage is used when running from VS in fast mode (Default for Debug configuration)
+# Stage base (runtime)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
-
-# This stage is used to build the service project
+# Stage build
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
@@ -18,13 +14,26 @@ COPY . .
 WORKDIR "/src/CRUD-Game-List"
 RUN dotnet build "./CRUD-Game-List.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# This stage is used to publish the service project to be copied to the final stage
+# Stage publish
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./CRUD-Game-List.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
+# Stage final
 FROM base AS final
 WORKDIR /app
+
+# Copia a aplicação publicada
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "CRUD-Game-List.dll"]
+
+# Copia o script wait-for-it.sh
+COPY wait-for-it.sh /wait-for-it.sh
+
+# Dá permissão de execução (como root)
+USER root
+RUN chmod +x /wait-for-it.sh
+# Volta pro usuário padrão
+USER app
+
+# Aguarda o Postgres antes de rodar a API
+ENTRYPOINT ["/wait-for-it.sh", "db", "5432", "--", "dotnet", "CRUD-Game-List.dll"]
