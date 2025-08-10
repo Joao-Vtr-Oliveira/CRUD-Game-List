@@ -7,5 +7,7 @@ namespace CRUD_Game_List.Business
 		Category AddCategory(string name);
 		List<Category> GetCategories();
 		Category FindCategoryById(long id);
+		Category UpdateCategory(long id, string name);
+		void DeleteCategory(long id);
 	}
 }

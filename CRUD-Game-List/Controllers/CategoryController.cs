@@ -38,5 +38,24 @@ namespace CRUD_Game_List.Controllers
 			return CreatedAtAction(nameof(GetById), new { id = created.Id }, dto);
 		}
 
+		[HttpPut("{id:long}")]
+		public ActionResult<CategoryDto> Put(long id, [FromBody] CategoryUpdateDto categoryUpdateDto)
+		{
+			if (id != categoryUpdateDto.Id)
+				return BadRequest("Route id and body id must match.");
+
+			var updated = _categoryBusiness.UpdateCategory(id, categoryUpdateDto.Name);
+			var dto = new CategoryDto(updated.Id, updated.Name);
+			return Ok(dto);
+		}
+
+
+		[HttpDelete("{id:long}")]
+		public ActionResult Delete(long id)
+		{
+			_categoryBusiness.DeleteCategory(id);
+			return NoContent();
+		}
+
 	}
 }

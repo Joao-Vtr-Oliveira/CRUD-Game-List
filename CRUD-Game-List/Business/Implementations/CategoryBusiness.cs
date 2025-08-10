@@ -20,7 +20,7 @@ namespace CRUD_Game_List.Business.Implementations
 			var trimmed = name?.Trim() ?? "";
 			if (string.IsNullOrWhiteSpace(trimmed)) throw new ArgumentException("Name is required.", nameof(name));
 			if (_repository.ExistsByName(trimmed)) throw new DuplicateCategoryNameException(trimmed);
-			
+
 			return _repository.AddCategory(trimmed);
 		}
 
@@ -28,6 +28,33 @@ namespace CRUD_Game_List.Business.Implementations
 		{
 			var cat = _repository.FindCategoryById(id);
 			return cat == null ? throw new CategoryNotFoundException(id) : cat;
+		}
+
+		public Category UpdateCategory(long id, string name)
+		{
+			var cat = _repository.FindCategoryById(id)
+								?? throw new CategoryNotFoundException(id);
+
+			var trimmed = name?.Trim() ?? "";
+			if (string.IsNullOrWhiteSpace(trimmed))
+				throw new ArgumentException("Name is required.", nameof(name));
+
+			if (!string.Equals(cat.Name, trimmed, StringComparison.OrdinalIgnoreCase))
+			{
+				if (_repository.ExistsByName(trimmed))
+					throw new DuplicateCategoryNameException(trimmed);
+
+				cat.Name = trimmed;
+			}
+
+			return _repository.UpdateCategory(cat);
+		}
+
+		public void DeleteCategory(long id)
+		{
+			var cat = _repository.FindCategoryById(id)
+					?? throw new CategoryNotFoundException(id);
+			_repository.DeleteCategory(cat);
 		}
 	}
 }

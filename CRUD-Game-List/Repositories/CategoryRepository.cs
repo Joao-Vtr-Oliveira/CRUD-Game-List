@@ -38,5 +38,17 @@ namespace CRUD_Game_List.Repositories
 		{
 			return _context.Categories.AsNoTracking().ToList();
 		}
+
+		public Category UpdateCategory(Category category)
+		{
+			_context.Categories.Update(category);
+			_context.SaveChanges();
+			return category;
+		}
+		public void DeleteCategory(Category category)
+		{
+			_context.Categories.Remove(category);
+			_context.SaveChanges();
+		}
 	}
 }
