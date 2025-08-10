@@ -24,7 +24,9 @@ namespace CRUD_Game_List.Repositories
 		public bool ExistsByName(string name)
 		{
 			var trimmed = name.Trim();
-			return _context.Categories.AsNoTracking().Any(c => c.Name.Equals(trimmed, StringComparison.CurrentCultureIgnoreCase));
+			return _context.Categories
+		.AsNoTracking()
+		.Any(c => c.Name.ToLower() == trimmed.ToLower());
 		}
 
 		public Category? FindCategoryById(long id)

@@ -33,6 +33,8 @@ namespace CRUD_Game_List.Controllers
 		[HttpPost]
 		public IActionResult Post([FromBody] CategoryCreateDto categoryDto)
 		{
+			if (categoryDto is null || string.IsNullOrWhiteSpace(categoryDto.Name))
+				return BadRequest("Name is required.");
 			var created = _categoryBusiness.AddCategory(categoryDto.Name);
 			var dto = new CategoryDto(created.Id, created.Name);
 			return CreatedAtAction(nameof(GetById), new { id = created.Id }, dto);

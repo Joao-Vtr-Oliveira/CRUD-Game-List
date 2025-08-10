@@ -37,6 +37,8 @@ builder.Services.AddCors(options =>
 // Dependency Injection
 builder.Services.AddScoped<ICategoryBusiness, CategoryBusiness>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IGameBusiness, GameBusiness>();
+builder.Services.AddScoped<IGameRepository, GameRepository>();
 
 var app = builder.Build();
 
