@@ -41,9 +41,6 @@ namespace CRUD_Game_List.Controllers
 		[HttpPut("{id:long}")]
 		public ActionResult<CategoryDto> Put(long id, [FromBody] CategoryUpdateDto categoryUpdateDto)
 		{
-			if (id != categoryUpdateDto.Id)
-				return BadRequest("Route id and body id must match.");
-
 			var updated = _categoryBusiness.UpdateCategory(id, categoryUpdateDto.Name);
 			var dto = new CategoryDto(updated.Id, updated.Name);
 			return Ok(dto);

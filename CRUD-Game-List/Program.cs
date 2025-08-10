@@ -40,19 +40,15 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 var app = builder.Build();
 
-// Força URL para funcionar dentro do container
 app.Urls.Add("http://0.0.0.0:8080");
 
-// Swagger (antes dos middlewares de roteamento)
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
 	c.SwaggerEndpoint("/swagger/v1/swagger.json", "CRUD Game List API v1");
-	c.RoutePrefix = "swagger"; // deixa acessível em /swagger
+	c.RoutePrefix = "swagger";
 });
 
-// Remove redirecionamento HTTPS no container para evitar problema
-// app.UseHttpsRedirection(); // <- comentado para ambiente Docker
 
 app.UseCors();
 app.UseAuthorization();
