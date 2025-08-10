@@ -31,19 +31,23 @@ namespace CRUD_Game_List.Repositories
 		public bool ExistsByName(string title)
 		{
 			var trimmed = title.Trim();
-			return _context.Games.AsNoTracking().Any(c => c.Title.Equals(trimmed, StringComparison.CurrentCultureIgnoreCase));
-
+			return _context.Games.AsNoTracking().Any(c => c.Title.ToLower() == trimmed.ToLower());
 		}
 
 		public Game? FindGameById(long id)
 		{
-			var game = _context.Games.AsNoTracking().FirstOrDefault(c => c.Id == id);
-			return game;
+			return _context.Games
+					.AsNoTracking()
+					.Include(g => g.Category)
+					.FirstOrDefault(g => g.Id == id);
 		}
 
 		public List<Game> GetGames()
 		{
-			return _context.Games.AsNoTracking().ToList();
+			return _context.Games
+		.AsNoTracking()
+		.Include(g => g.Category)
+		.ToList();
 		}
 
 		public Game UpdateGame(Game game)
