@@ -8,6 +8,6 @@ namespace CRUD_Game_List.Business
 		List<Game> GetGames();
 		Game FindGameById(long id);
 		Game UpdateGame(Game game);
-		void DeleteGame(Game game);
+		void DeleteGame(long id);
 	}
 }

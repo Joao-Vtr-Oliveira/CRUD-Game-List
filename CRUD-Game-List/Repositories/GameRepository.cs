@@ -57,6 +57,7 @@ namespace CRUD_Game_List.Repositories
 		{
 			_context.Games.Update(game);
 			_context.SaveChanges();
+			_context.Entry(game).Reference(g => g.Category).Load();
 			return game;
 		}
 	}

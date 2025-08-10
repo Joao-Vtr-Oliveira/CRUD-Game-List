@@ -21,10 +21,18 @@ public class ApiExceptionFilter : IExceptionFilter
 				status = StatusCodes.Status404NotFound;
 				problem.Title = "Not Found";
 				break;
+			case GameNotFoundException:
+				status = StatusCodes.Status404NotFound;
+				problem.Title = "Not found";
+				break;
 
 			case ArgumentException:
 				status = StatusCodes.Status400BadRequest;
 				problem.Title = "Bad Request";
+				break;
+			case DuplicateGameTitleException:
+				status = StatusCodes.Status409Conflict;
+				problem.Title = "Conflict";
 				break;
 
 			default:

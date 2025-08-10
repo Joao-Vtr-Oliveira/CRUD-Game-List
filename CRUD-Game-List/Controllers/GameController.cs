@@ -22,14 +22,13 @@ namespace CRUD_Game_List.Controllers
 		public IActionResult Get()
 		{
 			var games = _gameBusiness.GetGames();
-			return Ok(games);
+			var dtos = games.Select(g => new GameDto(g.Id, g.Title, g.Category.Name, g.Platform, g.Year));
+			return Ok(dtos);
 		}
 
 		[HttpPost]
 		public IActionResult Post([FromBody] GameCreateDto gameCreateDto)
 		{
-			// TODO: Check if the category exists in business
-
 			var game = new Game
 			{
 				Title = gameCreateDto.Title,
@@ -59,19 +58,19 @@ namespace CRUD_Game_List.Controllers
 		}
 
 		// TODO: Implement put and Delete
-		[HttpPut("{id:long}")]
-		public ActionResult<GameUpdateDto> Put(long id, [FromBody] GameUpdateDto gameUpdateDto)
+		[HttpPut]
+		public ActionResult<GameUpdateDto> Put([FromBody] GameUpdateDto gameUpdateDto)
 		{
-			//var updated = _categoryBusiness.UpdateCategory();
-			//var dto = new CategoryDto(updated.Id, updated.Name);
-			return Ok("Placeholder");
+			var game = new Game() { Title = gameUpdateDto.Title, Id = gameUpdateDto.Id, CategoryID = gameUpdateDto.CategoryId, Platform = gameUpdateDto.Platform, Year = gameUpdateDto.Year };
+			var updated = _gameBusiness.UpdateGame(game);
+			return Ok(new GameDto(updated.Id, updated.Title, updated.Category.Name, updated.Platform, updated.Year));
 		}
 
 
 		[HttpDelete("{id:long}")]
 		public ActionResult Delete(long id)
 		{
-			//_categoryBusiness.DeleteCategory(id);
+			_gameBusiness.DeleteGame(id);
 			return NoContent();
 		}
 	}
