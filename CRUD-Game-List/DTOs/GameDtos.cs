@@ -6,7 +6,7 @@ namespace CRUD_Game_List.DTOs
 	{
 		public record GameCreateDto(string Title, long CategoryId, string? Platform, int? Year);
 		public record GameUpdateDto(long Id, string Title, long CategoryId, string? Platform, int? Year);
-		public record GameDto(long Id, string Title, long CategoryId, string? Platform, int? Year);
+		public record GameDto(long Id, string Title, string CategoryName, string? Platform, int? Year);
 	}
 
 }

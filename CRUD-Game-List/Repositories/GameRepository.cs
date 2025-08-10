@@ -19,6 +19,9 @@ namespace CRUD_Game_List.Repositories
 		{
 			_context.Games.Add(game);
 			_context.SaveChanges();
+			_context.Entry(game)
+				.Reference(g => g.Category)
+				.Load();
 			return game;
 		}
 

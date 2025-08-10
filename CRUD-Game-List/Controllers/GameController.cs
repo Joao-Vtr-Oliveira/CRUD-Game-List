@@ -39,7 +39,7 @@ namespace CRUD_Game_List.Controllers
 			var dto = new GameDto(
 					created.Id,
 					created.Title,
-					created.CategoryID,
+					created.Category.Name,
 					created.Platform,
 					created.Year
 			);
@@ -51,7 +51,7 @@ namespace CRUD_Game_List.Controllers
 		public ActionResult<GameDto> GetById(long id)
 		{
 			var g = _gameBusiness.FindGameById(id);
-			return Ok(new GameDto(g.Id, g.Title, g.CategoryID, g.Platform, g.Year));
+			return Ok(new GameDto(g.Id, g.Title, g.Category.Name, g.Platform, g.Year));
 		}
 
 
