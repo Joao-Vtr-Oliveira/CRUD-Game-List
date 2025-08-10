@@ -1,37 +1,56 @@
 ﻿using CRUD_Game_List.Model;
+using CRUD_Game_List.Model.Context;
+using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 
 namespace CRUD_Game_List.Repositories
 {
 	public class GameRepository : IGameRepository
 	{
-		public Game AddGame(string name)
+
+		private readonly PostgreSQLContext _context;
+
+		public GameRepository(PostgreSQLContext context)
 		{
-			throw new NotImplementedException();
+			_context = context;
+		}
+
+		public Game AddGame(Game game)
+		{
+			_context.Games.Add(game);
+			_context.SaveChanges();
+			return game;
 		}
 
 		public void DeleteGame(Game game)
 		{
-			throw new NotImplementedException();
+			_context.Games.Remove(game);
+			_context.SaveChanges();
 		}
 
-		public bool ExistsByName(string name)
+		public bool ExistsByName(string title)
 		{
-			throw new NotImplementedException();
+			var trimmed = title.Trim();
+			return _context.Games.AsNoTracking().Any(c => c.Title.Equals(trimmed, StringComparison.CurrentCultureIgnoreCase));
+
 		}
 
 		public Game? FindGameById(long id)
 		{
-			throw new NotImplementedException();
+			var game = _context.Games.AsNoTracking().FirstOrDefault(c => c.Id == id);
+			return game;
 		}
 
 		public List<Game> GetGames()
 		{
-			throw new NotImplementedException();
+			return _context.Games.AsNoTracking().ToList();
 		}
 
 		public Game UpdateGame(Game game)
 		{
-			throw new NotImplementedException();
+			_context.Games.Update(game);
+			_context.SaveChanges();
+			return game;
 		}
 	}
 }

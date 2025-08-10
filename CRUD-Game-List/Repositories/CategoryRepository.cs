@@ -19,13 +19,12 @@ namespace CRUD_Game_List.Repositories
 			_context.Add(category);
 			_context.SaveChanges();
 			return category;
-
 		}
 
 		public bool ExistsByName(string name)
 		{
 			var trimmed = name.Trim();
-			return _context.Categories.AsNoTracking().Any(c => c.Name.ToLower() == trimmed.ToLower());
+			return _context.Categories.AsNoTracking().Any(c => c.Name.Equals(trimmed, StringComparison.CurrentCultureIgnoreCase));
 		}
 
 		public Category? FindCategoryById(long id)

@@ -4,11 +4,11 @@ namespace CRUD_Game_List.Repositories
 {
 	public interface IGameRepository
 	{
-		Game AddGame(string name);
+		Game AddGame(Game game);
 		List<Game> GetGames();
 		Game? FindGameById(long id);
 		Game UpdateGame(Game game);
 		void DeleteGame(Game game);
-		bool ExistsByName(string name);
+		bool ExistsByName(string title);
 	}
 }
