@@ -1,5 +1,4 @@
 ﻿using CRUD_Game_List.Business;
-using CRUD_Game_List.DTOs;
 using CRUD_Game_List.Model;
 using Microsoft.AspNetCore.Mvc;
 using static CRUD_Game_List.DTOs.GameDtos;
@@ -20,8 +19,8 @@ namespace CRUD_Game_List.Controllers
 		[HttpGet]
 		public IActionResult Get()
 		{
-			var categories = _gameBusiness.GetGames();
-			return Ok(categories);
+			var games = _gameBusiness.GetGames();
+			return Ok(games);
 		}
 
 		[HttpPost]
